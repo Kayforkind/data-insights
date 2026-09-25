@@ -35,10 +35,13 @@ export function recordAvailability(
   failed: SourceId[]
 ): void {
   const now = Date.now();
+  const failedSet = new Set(failed);
   for (const id of Object.keys(SOURCES) as SourceId[]) {
     if (!history.has(id)) history.set(id, seedHistory(id));
     const records = history.get(id)!;
-    records.push({ at: now, ok: used.includes(id) });
+    // A source that failed this run is not available, even if it also
+    // appears in `used` (partial success counts as a miss).
+    records.push({ at: now, ok: used.includes(id) && !failedSet.has(id) });
     if (records.length > MAX_RECORDS) records.shift();
   }
 }

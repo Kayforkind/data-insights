@@ -43,9 +43,6 @@ export default async function SourceDetailPage({
 
   // Sub-themes contributed to (from the taxonomy).
   const contributedTopics = assessment.coverage;
-  const subThemesFromCoverage = TOPIC_TAXONOMY.filter((t) =>
-    contributedTopics.includes(t.topic)
-  ).flatMap((t) => t.subThemes.map((st) => ({ topic: t.topic, sub: st })));
 
   return (
     <main className="min-h-full bg-background">

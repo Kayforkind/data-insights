@@ -11,7 +11,7 @@ export function FocusTopics({ report }: { report: DailyReport }) {
     <section className="border-b border-rule bg-surface">
       <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
         <h3 className="text-[11px] uppercase tracking-[0.2em] text-muted">
-          Focus topics in today's report
+          Focus topics in today&apos;s report
         </h3>
         <ul className="mt-3 flex flex-wrap gap-2">
           {report.byTopic.map((t) => (
