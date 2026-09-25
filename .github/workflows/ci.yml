@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # `npm ci` fails on a lockfile out of sync with package.json — which is
+      # exactly the failure mode this repo shipped with (fresh clones could
+      # not install until 2026-09-24). Keep it as the install step forever.
+      - run: npm ci
+      - name: Dependency audit (prod)
+        run: npm audit --omit=dev
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Build
+        run: npm run build
+        env:
+          # Ingestion is keyless by design; CI builds without credentials to
+          # prove the deterministic fallback path stays functional.
+          OPENAI_API_KEY: ""
